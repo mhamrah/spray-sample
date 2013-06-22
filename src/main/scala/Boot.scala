@@ -13,6 +13,7 @@ import spray.can.Http
 import spray.httpx.Json4sSupport
 import spray.routing._
 import spray.util._
+import spray.can.server.Stats
 
 object Boot extends App {
   implicit val system = ActorSystem("spray-sample-system")
@@ -63,14 +64,21 @@ trait SpraySampleService extends HttpService {
         entity(as[JObject]) { someObject =>
           doCreate(someObject)
         }
+      } 
+    } ~
+    path ("entity" / Segment) { id =>
+      get {
+        complete(s"detail ${id}")
       } ~
-      path ("entity" / Segment) { id =>
-        get {
-          complete("detail")
-        } ~
-        post {
-          complete("update")
-        }
+      post {
+        complete(s"update ${id}")
+      }
+    } ~
+    path("stats") {
+      complete {
+        actorRefFactory.actorFor("/user/IO-HTTP/listener-0")
+          .ask(Http.GetStats)(1.second)
+          .mapTo[Stats]
       }
     }
   }
