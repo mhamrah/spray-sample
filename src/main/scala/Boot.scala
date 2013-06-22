@@ -17,32 +17,41 @@ import spray.util._
 object Boot extends App {
   implicit val system = ActorSystem("spray-sample-system")
 
-  /* Spray Service */
-  val service= system.actorOf(Props[SpraysampleActor], "spray-sample-service")
+  /* Use Akka to create our Spray Service */
+  val service= system.actorOf(Props[SpraySampleActor], "spray-sample-service")
+
+  /* and bind to Akka's I/O interface */
   IO(Http) ! Http.Bind(service, system.settings.config.getString("app.interface"), system.settings.config.getInt("app.port"))
 
+  /* Allow a user to shutdown the service easily */
   println("Hit any key to exit.")
   val result = readLine()
   system.shutdown()
 }
 
-class SpraysampleActor extends Actor with SpraysampleService with SprayActorLogging {
+/* Our Server Actor is pretty lightweight; simply mixing in our route trait and logging */
+class SpraySampleActor extends Actor with SpraySampleService with SprayActorLogging {
   def actorRefFactory = context
   def receive = runRoute(spraysampleRoute)
 }
 
+/* Used to mix in Spray's Marshalling Support with json4s */
 object Json4sProtocol extends Json4sSupport {
   implicit def json4sFormats: Formats = DefaultFormats
 }
 
-trait SpraysampleService extends HttpService {
+/* Our route directives, the heart of the service.
+ * Note you can mix-in dependencies should you so chose */
+trait SpraySampleService extends HttpService {
   import Json4sProtocol._
   import WorkerActor._
 
+  //These implicit values allow us to use futures
+  //in this trait.
   implicit def executionContext = actorRefFactory.dispatcher
   implicit val timeout = Timeout(5 seconds)
 
-
+  //Our worker Actor handles the work of the request.
   val worker = actorRefFactory.actorOf(Props[WorkerActor], "worker")
 
   val spraysampleRoute = {
@@ -51,8 +60,8 @@ trait SpraysampleService extends HttpService {
         complete("list")
       } ~
       post {
-        entity(as[JObject]) { asset =>
-          doCreate(asset)
+        entity(as[JObject]) { someObject =>
+          doCreate(someObject)
         }
       } ~
       path ("entity" / Segment) { id =>
@@ -67,12 +76,16 @@ trait SpraysampleService extends HttpService {
   }
 
   def doCreate[T](json: JObject) = {
-    val result = (worker ? Create(json))
+    //We use the Ask pattern to return
+    //a future from our worker Actor,
+    //which then gets passed to the complete
+    //directive to finish the request.
+    val response = (worker ? Create(json))
                   .mapTo[Ok]
                   .map(result => result)
                   .recover { case _ => "error" }
 
-    complete(result)
+    complete(response)
   }
 
 }
