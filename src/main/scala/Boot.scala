@@ -76,6 +76,8 @@ trait SpraySampleService extends HttpService {
     } ~
     path("stats") {
       complete {
+        //This is another way to use the Akka ask pattern
+        //with Spray.
         actorRefFactory.actorFor("/user/IO-HTTP/listener-0")
           .ask(Http.GetStats)(1.second)
           .mapTo[Stats]
@@ -90,7 +92,7 @@ trait SpraySampleService extends HttpService {
     //directive to finish the request.
     val response = (worker ? Create(json))
                   .mapTo[Ok]
-                  .map(result => result)
+                  .map(result => s"I got a response: ${result}")
                   .recover { case _ => "error" }
 
     complete(response)
