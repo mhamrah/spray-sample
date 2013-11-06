@@ -17,7 +17,7 @@ scmInfo := Some(
 )
 
 /* scala versions and options */
-scalaVersion := "2.10.1"
+scalaVersion := "2.10.3"
 
 crossScalaVersions := Seq(
 /*  "2.9.3-RC1",
@@ -65,18 +65,20 @@ javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 libraryDependencies ++= Seq (
   "com.github.nscala-time" %% "nscala-time" % "0.4.2"
   // -- testing --
-  , "org.scalatest" % "scalatest_2.10" % "2.0.M5b" % "test"
-  , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test" 
+  // , "org.scalatest" % "scalatest_2.10" % "2.0.M5b" % "test"
+  // , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test" 
+  , "org.specs2" %% "specs2" % "2.2.3" % "test"
   // -- Logging --
   ,"ch.qos.logback" % "logback-classic" % "1.0.13"
   // -- Akka --
-  ,"com.typesafe.akka" %% "akka-testkit" % "2.1.4" % "test"
-  ,"com.typesafe.akka" %% "akka-actor" % "2.1.4"
-  ,"com.typesafe.akka" %% "akka-slf4j" % "2.1.4"
+  ,"com.typesafe.akka" %% "akka-testkit" % "2.2.3" % "test"
+  ,"com.typesafe.akka" %% "akka-actor" % "2.2.3"
+  ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.3"
   // -- Spray --
-  ,"io.spray" % "spray-routing" % "1.1-M8"
-  ,"io.spray" % "spray-can" % "1.1-M8"
-  ,"io.spray" % "spray-httpx" % "1.1-M8"
+  ,"io.spray" % "spray-routing" % "1.2-RC2"
+  ,"io.spray" % "spray-can" % "1.2-RC2"
+  ,"io.spray" % "spray-httpx" % "1.2-RC2"
+  ,"io.spray" % "spray-testkit" % "1.2-RC2" % "test"
   // -- Json --
   ,"org.json4s" %% "json4s-native" % "3.2.2"
 )

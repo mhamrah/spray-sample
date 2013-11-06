@@ -2,7 +2,7 @@ package com.mlh.spraysample
 
 import scala.concurrent.duration._
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.io.IO
 import akka.pattern.ask
 import akka.util.Timeout
@@ -12,7 +12,6 @@ import org.json4s.native.Serialization.{read, write}
 import spray.can.Http
 import spray.httpx.Json4sSupport
 import spray.routing._
-import spray.util._
 import spray.can.server.Stats
 
 object Boot extends App {
@@ -31,7 +30,7 @@ object Boot extends App {
 }
 
 /* Our Server Actor is pretty lightweight; simply mixing in our route trait and logging */
-class SpraySampleActor extends Actor with SpraySampleService with SprayActorLogging {
+class SpraySampleActor extends Actor with SpraySampleService with ActorLogging {
   def actorRefFactory = context
   def receive = runRoute(spraysampleRoute)
 }
@@ -78,7 +77,7 @@ trait SpraySampleService extends HttpService {
       complete {
         //This is another way to use the Akka ask pattern
         //with Spray.
-        actorRefFactory.actorFor("/user/IO-HTTP/listener-0")
+        actorRefFactory.actorSelection("/user/IO-HTTP/listener-0")
           .ask(Http.GetStats)(1.second)
           .mapTo[Stats]
       }
