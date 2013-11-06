@@ -77,7 +77,7 @@ trait SpraySampleService extends HttpService {
       complete {
         //This is another way to use the Akka ask pattern
         //with Spray.
-        actorRefFactory.actorFor("/user/IO-HTTP/listener-0")
+        actorRefFactory.actorSelection("/user/IO-HTTP/listener-0")
           .ask(Http.GetStats)(1.second)
           .mapTo[Stats]
       }
