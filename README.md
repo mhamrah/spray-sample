@@ -1,6 +1,7 @@
 # spray-sample #
 
-An example api app that leverages [Spray](spray.io) and [Akka](akka.io) 
+An example api app that leverages [Spray](spray.io) and [Akka](akka.io). You may also be interested
+in [stockman](https://github.com/mhamrah/stockman) which provices a richer example application with more functionality.
 
 Clone to your computer and run via sbt:
 
