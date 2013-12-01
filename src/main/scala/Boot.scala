@@ -13,6 +13,7 @@ import spray.can.Http
 import spray.httpx.Json4sSupport
 import spray.routing._
 import spray.can.server.Stats
+import spray.http.StatusCodes._
 
 object Boot extends App {
   implicit val system = ActorSystem("spray-sample-system")
@@ -40,6 +41,9 @@ object Json4sProtocol extends Json4sSupport {
   implicit def json4sFormats: Formats = DefaultFormats
 }
 
+/* Our case class, used for request and responses */
+case class Foo(bar: String)
+
 /* Our route directives, the heart of the service.
  * Note you can mix-in dependencies should you so chose */
 trait SpraySampleService extends HttpService {
@@ -56,14 +60,16 @@ trait SpraySampleService extends HttpService {
 
   val spraysampleRoute = {
     path("entity") {
-      get { 
-        complete("list")
+      get {
+        complete(List(Foo("foo1"), Foo("foo2")))
       } ~
       post {
-        entity(as[JObject]) { someObject =>
-          doCreate(someObject)
+        respondWithStatus(Created) {
+          entity(as[Foo]) { someObject =>
+            doCreate(someObject)
+          }
         }
-      } 
+      }
     } ~
     path ("entity" / Segment) { id =>
       get {
@@ -84,12 +90,12 @@ trait SpraySampleService extends HttpService {
     }
   }
 
-  def doCreate[T](json: JObject) = {
+  def doCreate[T](foo: Foo) = {
     //We use the Ask pattern to return
     //a future from our worker Actor,
     //which then gets passed to the complete
     //directive to finish the request.
-    val response = (worker ? Create(json))
+    val response = (worker ? Create(foo))
                   .mapTo[Ok]
                   .map(result => s"I got a response: ${result}")
                   .recover { case _ => "error" }

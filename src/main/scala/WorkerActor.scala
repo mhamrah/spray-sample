@@ -8,15 +8,15 @@ import org.json4s.native.JsonMethods._
 
 object WorkerActor {
   case class Ok(id: Int)
-  case class Create(json: JObject)
+  case class Create(foo: Foo)
 }
 
 class WorkerActor extends Actor with ActorLogging {
   import WorkerActor._
 
   def receive = {
-    case Create(json) => {
-      log.info(s"Create ${json}")
+    case Create(foo) => {
+      log.info(s"Create ${foo}")
       sender ! Ok(util.Random.nextInt(10000))
       }
     }
