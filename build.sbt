@@ -61,23 +61,26 @@ scalacOptions <++= scalaVersion map { sv =>
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
+val akkaVersion = "2.2.3"
+val sprayVersion = "1.2.0"
+
 /* dependencies */
 libraryDependencies ++= Seq (
   "com.github.nscala-time" %% "nscala-time" % "0.4.2"
   // -- testing --
   , "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
-  , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test" 
+  , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
   // -- Logging --
   ,"ch.qos.logback" % "logback-classic" % "1.0.13"
   // -- Akka --
-  ,"com.typesafe.akka" %% "akka-testkit" % "2.2.3" % "test"
-  ,"com.typesafe.akka" %% "akka-actor" % "2.2.3"
-  ,"com.typesafe.akka" %% "akka-slf4j" % "2.2.3"
+  ,"com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test"
+  ,"com.typesafe.akka" %% "akka-actor" % akkaVersion
+  ,"com.typesafe.akka" %% "akka-slf4j" % akkaVersion
   // -- Spray --
-  ,"io.spray" % "spray-routing" % "1.2-RC2"
-  ,"io.spray" % "spray-can" % "1.2-RC2"
-  ,"io.spray" % "spray-httpx" % "1.2-RC2"
-  ,"io.spray" % "spray-testkit" % "1.2-RC2" % "test"
+  ,"io.spray" % "spray-routing" % sprayVersion
+  ,"io.spray" % "spray-can" % sprayVersion
+  ,"io.spray" % "spray-httpx" % sprayVersion
+  ,"io.spray" % "spray-testkit" % sprayVersion % "test"
   // -- Json --
   ,"org.json4s" %% "json4s-native" % "3.2.2"
 )
