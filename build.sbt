@@ -17,15 +17,7 @@ scmInfo := Some(
 )
 
 /* scala versions and options */
-scalaVersion := "2.10.3"
-
-crossScalaVersions := Seq(
-/*  "2.9.3-RC1",
-  "2.9.2",
-  "2.9.1", "2.9.1-1",
-  "2.9.0", "2.9.0-1",
-  "2.8.0", "2.8.1", "2.8.2" */
-)
+scalaVersion := "2.11.4"
 
 // These options will be used for *all* versions.
 scalacOptions ++= Seq(
@@ -41,60 +33,29 @@ scalacOptions ++= Seq(
   "-Yinline"
 )
 
-// These language flags will be used only for 2.10.x.
-// Uncomment those you need, or if you hate SIP-18, all of them.
-scalacOptions <++= scalaVersion map { sv =>
-  if (sv startsWith "2.10") List(
-    "-Xverify"
-    ,"-Ywarn-all"
-    ,"-feature"
-    ,"-language:postfixOps"
-    // "-language:reflectiveCalls",
-    // "-language:implicitConversions"
-    // "-language:higherKinds",
-    // "-language:existentials",
-    // "-language:experimental.macros",
-    // "-language:experimental.dynamics"
-  )
-  else Nil
-}
-
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
-val akkaVersion = "2.2.3"
-val sprayVersion = "1.2.0"
+val akkaVersion = "2.3.6"
+val sprayVersion = "1.3.1"
 
 /* dependencies */
 libraryDependencies ++= Seq (
-  "com.github.nscala-time" %% "nscala-time" % "0.4.2"
+  "com.github.nscala-time" %% "nscala-time" % "1.4.0"
   // -- testing --
-  , "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
-  , "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
+  , "org.scalatest" %% "scalatest" % "2.2.2" % "test"
+  , "org.scalamock" %% "scalamock-scalatest-support" % "3.1.4" % "test"
   // -- Logging --
-  ,"ch.qos.logback" % "logback-classic" % "1.0.13"
+  ,"ch.qos.logback" % "logback-classic" % "1.1.2"
   // -- Akka --
   ,"com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test"
   ,"com.typesafe.akka" %% "akka-actor" % akkaVersion
   ,"com.typesafe.akka" %% "akka-slf4j" % akkaVersion
   // -- Spray --
-  ,"io.spray" % "spray-routing" % sprayVersion
-  ,"io.spray" % "spray-can" % sprayVersion
-  ,"io.spray" % "spray-httpx" % sprayVersion
-  ,"io.spray" % "spray-testkit" % sprayVersion % "test"
+  ,"io.spray" %% "spray-routing" % sprayVersion
+  ,"io.spray" %% "spray-can" % sprayVersion
+  ,"io.spray" %% "spray-httpx" % sprayVersion
+  ,"io.spray" %% "spray-testkit" % sprayVersion % "test"
   // -- Json --
-  ,"org.json4s" %% "json4s-native" % "3.2.2"
+  ,"org.json4s" %% "json4s-native" % "3.2.11"
+  ,"com.typesafe.play" %% "play-json" % "2.4.0-M1"
 )
-
-/* you may need these repos */
-resolvers ++= Seq(
-  // Resolver.sonatypeRepo("snapshots")
-  // Resolver.typesafeRepo("releases")
-  "spray repo" at "http://repo.spray.io"
-)
-
-/* assembly plugin */
-mainClass in AssemblyKeys.assembly := Some("com.mlh.spray-sample.Main")
-
-assemblySettings
-
-test in AssemblyKeys.assembly := {}

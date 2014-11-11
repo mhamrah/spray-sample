@@ -1,6 +1,7 @@
 package com.mlh.spraysample
-import org.scalatest.FreeSpec
-import org.scalatest.matchers.ShouldMatchers
+package basic
+
+import org.scalatest._
 import spray.testkit.ScalatestRouteTest
 import spray.http.HttpEntity
 import spray.http.ContentTypes
@@ -8,7 +9,7 @@ import spray.can.server.Stats
 import spray.http.StatusCodes._
 import org.json4s._
 
-class MainSpec extends FreeSpec with ShouldMatchers with ScalatestRouteTest with SpraySampleService {
+class MainSpec extends FreeSpec with Matchers with ScalatestRouteTest with SpraySampleService {
   def actorRefFactory = system
 
   "The spraysample Route" - {
@@ -44,5 +45,4 @@ class MainSpec extends FreeSpec with ShouldMatchers with ScalatestRouteTest with
     }
   }
 }
-
 

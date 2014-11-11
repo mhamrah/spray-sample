@@ -1,4 +1,5 @@
 package com.mlh.spraysample
+package basic
 
 import org.scalatest.FreeSpecLike
 import org.scalatest.Matchers
@@ -14,12 +15,12 @@ import scala.concurrent.Await
 import akka.pattern.ask
 
 class WorkerSpec extends TestKit(ActorSystem("WorkerSpec"))
-with ImplicitSender
-with FreeSpecLike
-with Matchers
-with BeforeAndAfterAll {
+    with ImplicitSender
+    with FreeSpecLike
+    with Matchers
+    with BeforeAndAfterAll {
   import WorkerActor._
-  
+
   val actorRef = TestActorRef[WorkerActor]
 
   override def afterAll {

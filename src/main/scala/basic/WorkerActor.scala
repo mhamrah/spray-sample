@@ -1,6 +1,7 @@
 package com.mlh.spraysample
+package basic
 
-import akka.actor.{Actor, ActorSystem, Props, ActorLogging}
+import akka.actor.{ Actor, ActorSystem, Props, ActorLogging }
 import akka.io.IO
 import akka.routing._
 import org.json4s._
@@ -18,8 +19,7 @@ class WorkerActor extends Actor with ActorLogging {
     case Create(foo) => {
       log.info(s"Create ${foo}")
       sender ! Ok(util.Random.nextInt(10000))
-      }
     }
   }
-
+}
 
