@@ -71,16 +71,16 @@ trait SpraySampleService extends HttpService {
   }
 
   def doCreate[T](foo: Foo) = {
+    complete {
     //We use the Ask pattern to return
     //a future from our worker Actor,
     //which then gets passed to the complete
     //directive to finish the request.
-    val response = (worker ? Create(foo))
+    (worker ? Create(foo))
       .mapTo[Ok]
       .map(result => s"I got a response: ${result}")
       .recover { case _ => "error" }
-
-    complete(response)
+    }
   }
 
 }

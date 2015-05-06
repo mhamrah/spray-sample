@@ -26,10 +26,6 @@ object Boot extends App {
   /* and bind to Akka's I/O interface */
   IO(Http) ! Http.Bind(service, system.settings.config.getString("app.interface"), system.settings.config.getInt("app.port"))
 
-  /* Allow a user to shutdown the service easily */
-  println("Hit any key to exit.")
-  val result = scala.io.StdIn.readLine()
-  system.shutdown()
 }
 
 /* Our Server Actor is pretty lightweight; simply mixing in our route trait and logging */
